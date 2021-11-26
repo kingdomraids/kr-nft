@@ -28,7 +28,7 @@ module.exports = {
   },
   compilers: {
     solc: {
-      version: '0.8.4', // Fetch exact version from solc-bin (default: truffle's version)
+      version: "v0.8.10+commit.fc410830", // Fetch exact version from solc-bin (default: truffle's version)
       // docker: true,        // Use "0.5.1" you've installed locally with docker (default: false)
       settings: { // See the solidity docs for advice about optimization and evmVersion
         optimizer: {
@@ -42,6 +42,5 @@ module.exports = {
   api_keys: {
     bscscan: process.env.BSC_SCAN_API_KEY
   },
-  contracts_directory: path.resolve(__dirname, 'contracts'),
   plugins: ["truffle-plugin-verify"],
 };

@@ -2,7 +2,6 @@
 pragma solidity >=0.8.0;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "@openzeppelin/contracts/utils/Address.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
@@ -14,7 +13,6 @@ import "./Interfaces/IHero.sol";
 contract Summon is Ownable, Pausable {
 
     using Address for address;
-    using SafeMath for uint256;
     using ECDSA for bytes32;
 
     // Price (in wei) for the summon

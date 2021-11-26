@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.0;
 
-import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
 import "../ExtendERC721.sol";
@@ -9,7 +8,6 @@ import "../Interfaces/IHero.sol";
 
 contract Hero is ExtendERC721, IHero {
 
-    using SafeMath for uint256;
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIds;
 
