@@ -73,7 +73,6 @@ contract Summon is Ownable, Pausable {
     }
 
     function setFee(uint256 newFee) public onlyOwner {
-        require(newFee >= 0, "Fee must be greater than 0");
         fee = newFee;
         emit ChangeFee(newFee);
     }
