@@ -11,7 +11,6 @@ import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "./Interfaces/IHero.sol";
 
 contract Summon is Ownable, Pausable {
-
     using Address for address;
     using ECDSA for bytes32;
 
@@ -23,24 +22,30 @@ contract Summon is Ownable, Pausable {
 
     mapping(string => bool) executed;
 
+    // Events
+    event ChangeHeroAddress(address newAddress);
+    event ChangeAcceptedToken(address tokenAddress);
+    event ChangeSignerPublicKey(address newSignerPublicKey);
+    event ChangeFee(uint256 newFee);
+
     constructor(
         uint256 _fee,
         address _acceptedTokenAddress,
         address _heroSmartContractAddress
     ) {
-        fee = _fee;
-
-        require(
-            _heroSmartContractAddress.isContract(),
-            "The hero contract address must be a deployed contract"
-        );
-        heroSmartContractAddress = _heroSmartContractAddress;
-
+        setFee(_fee);
+        setHeroSmartContractAddress(_heroSmartContractAddress);
         setAcceptedToken(_acceptedTokenAddress);
     }
 
     function setSignerPublicKey(address newSignerPublicKey) public onlyOwner {
+        require(newSignerPublicKey != address(0), "Invalid address");
+        require(
+            newSignerPublicKey != signerPublicKey,
+            "New signer public key should be different with the current key"
+        );
         signerPublicKey = newSignerPublicKey;
+        emit ChangeSignerPublicKey(newSignerPublicKey);
     }
 
     function setAcceptedToken(address newAcceptedTokenAddress)
@@ -52,20 +57,28 @@ contract Summon is Ownable, Pausable {
             "The accepted token address must be a deployed contract"
         );
         acceptedToken = IERC20(newAcceptedTokenAddress);
+        emit ChangeAcceptedToken(newAcceptedTokenAddress);
     }
 
     function setHeroSmartContractAddress(address newHeroSmartContractAddress)
         public
         onlyOwner
     {
+        require(
+            newHeroSmartContractAddress.isContract(),
+            "The hero contract address must be a deployed contract"
+        );
         heroSmartContractAddress = newHeroSmartContractAddress;
+        emit ChangeHeroAddress(newHeroSmartContractAddress);
     }
 
     function setFee(uint256 newFee) public onlyOwner {
+        require(newFee >= 0, "Fee must be greater than 0");
         fee = newFee;
+        emit ChangeFee(newFee);
     }
 
-    function summon(string memory _nonce,bytes memory signature)
+    function summon(string memory _nonce, bytes memory signature)
         external
         whenNotPaused
         returns (uint256)
